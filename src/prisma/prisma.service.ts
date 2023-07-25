@@ -3,7 +3,7 @@ import { Prisma, PrismaClient } from '@prisma/client';
 import { PrismaMiddleware } from './prisma.middleware';
 
 @Injectable()
-export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, 'query'> implements OnModuleInit {
+export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, 'query' | 'beforeExit'> implements OnModuleInit {
 
     constructor() {
         super({ log: [{ emit: 'event', level: 'query' }] });
@@ -14,9 +14,11 @@ export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, 'que
         await this.$connect();
     }
 
-    // async enableShutdownHooks(app: INestApplication) {
-    //     this.$on('beforeExit', async () => {
-    //         await app.close();
-    //     })
-    // }
+    async enableShutdownHooks(app: INestApplication) {
+        this.$on('beforeExit', async () => {
+            await app.close();
+        })
+        // this.$on('query', async (p) => {
+        // })
+    }
 }

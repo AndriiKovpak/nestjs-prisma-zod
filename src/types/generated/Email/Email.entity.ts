@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { UserEntity } from '../User/User.entity';
+import { EmailPasswordEntity } from '../EmailPassword/EmailPassword.entity';
 
 export class EmailEntity {
   user?: UserEntity;
@@ -17,4 +18,5 @@ export class EmailEntity {
     format: 'date-time',
   })
   updatedAt: Date;
+  emailPassword?: EmailPasswordEntity | null;
 }
