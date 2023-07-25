@@ -24,40 +24,71 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[Nest](https://github.com/AndriiKovpak/nestjs-prisma-zod/) This is a sample repository that you can use with NestJS, Prisma, and Zod.
 
 ## Installation
 
 ```bash
+# NPM
+$ npm install
+
+# YARN
 $ yarn install
+```
+
+## Migrate the database
+
+```bash
+# NPM
+$ npm run db:migrate:dev
+
+# YARN
+$ yarn db:migrate:dev
+```
+
+## DB seed
+
+```bash
+# NPM
+$ npm run db:seed
+
+# YARN 
+$ yarn db:seed
+```
+
+## Build the app
+
+```bash
+# NPM
+$ npm run build
+
+# YARN
+$ yarn build
+```
+
+## Running the app in the development mode
+
+```bash
+# NPM
+$ npm run dev
+
+# yarn
+$ yarn dev
 ```
 
 ## Running the app
 
 ```bash
-# development
-$ yarn run start
+# NPM
+$ npm run start
+# or
+$ npm start
 
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+# YARN
+$ yarn start
 ```
 
-## Test
-
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
-```
-
+<!--
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
@@ -71,3 +102,4 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+-->
