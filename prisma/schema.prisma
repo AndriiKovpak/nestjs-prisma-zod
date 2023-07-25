@@ -1,0 +1,129 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+// generator zod {
+//   provider              = "nestjs-zod-prisma"
+//   output                = "../src/types/zod"
+//   relationModel         = true
+//   generateDTO           = true
+//   modelCase             = "PascalCase"
+//   modelSuffix           = "Model"
+//   dtoCase               = "PascalCase"
+//   dtoSuffix             = "Dto"
+//   useDecimalJs          = true
+//   prismaJsonNullability = true
+// }
+
+generator types {
+  provider                        = "prisma-types-generator"
+  output                          = "../src/types/generated"
+  outputToNestJsResourceStructure = true
+  flatResourceStructure           = true
+  exportRelationModifierClasses   = true
+  reExport                        = true
+  createDtoPrefix                 = "Create"
+  updateDtoPrefix                 = "Update"
+  dtoSuffix                       = "Dto"
+  entityPrefix                    = ""
+  entitySuffix                    = "Entity"
+  classValidation                 = false
+  fileNamingStyle                 = "pascal"
+  noDependencies                  = false
+  excludeEntity                   = false
+  excludePlainDto                 = false
+  excludeCreateDto                = false
+  excludeUpdateDto                = false
+  excludeConnectDto               = false
+  definiteAssignmentAssertion     = false
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+  output   = "../generated/dbml"
+}
+
+model User {
+  id         String     @id @default(cuid())
+  status     UserStatus @default(Pending)
+  role       Role       @relation(fields: [roleId], references: [id])
+  roleId     String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @default(now()) @updatedAt
+  deletedAt  DateTime?
+  properties Property[]
+  email      Email?
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  ord         Int      @unique
+  name        String   @unique
+  description String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+  users       User[]
+}
+
+model PropertyCategory {
+  id                    String                 @id @default(cuid())
+  name                  String                 @unique
+  dataType              DataType               @default(String)
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @default(now()) @updatedAt
+  properties            Property[]
+  userPropertyComputeds UserPropertyComputed[]
+}
+
+model Property {
+  id                 String           @id @default(cuid())
+  name               String           @unique
+  propertyCategory   PropertyCategory @relation(fields: [propertyCategoryId], references: [id])
+  propertyCategoryId String
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @default(now()) @updatedAt
+  users              User[]
+}
+
+model UserPropertyComputed {
+  id                 String           @id @default(cuid())
+  ord                Int              @unique
+  isUnique           Boolean          @default(false)
+  propertyCategory   PropertyCategory @relation(fields: [propertyCategoryId], references: [id])
+  propertyCategoryId String
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @default(now()) @updatedAt
+}
+
+model Email {
+  user              User     @relation(fields: [userId], references: [id])
+  userId            String   @unique
+  email             String   @unique
+  verificationToken String?
+  isVerified        Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now()) @updatedAt
+}
+
+enum UserStatus {
+  Pending
+  Activated
+  Blacklisted
+  Deleted
+}
+
+enum DataType {
+  String
+  Number
+  Boolean
+  DateTime
+}
