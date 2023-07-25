@@ -1,9 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { LoginAuthDTO, TokenDTO } from 'src/types';
-import { compare } from 'bcrypt';
+import { LoginAuthDTO, SignUpAuthDTO, TokenDTO } from 'src/types';
+import { compare, hash } from 'bcrypt';
 import { env } from 'src/utils';
+import { RoleId } from 'prisma/seedData';
 
 const roundsOfHashing = parseInt(env.ROUNDS_OF_HASHING);
 
@@ -88,5 +89,64 @@ export class AuthService {
         }
     }
 
-    // const hashedPassword = await bcrypt.hash(password, roundsOfHashing);
+    async signUp({ roleId, email, password }: SignUpAuthDTO): Promise<TokenDTO> {
+
+        roleId = roleId || RoleId.customer;
+
+        email = email.trim();
+
+        if (!email || !password) {
+            throw new Error('Invalid parameter error');
+        }
+
+        const exist = await this.prisma.user.findFirst({
+            where: { email: { email } },
+            include: {
+                email: true,
+                role: true,
+            }
+        });
+
+        if (exist) {
+            switch (exist.status) {
+                case 'Blacklisted':
+                    throw new Error('The email is blacklisted');
+                case 'Pending':
+                    throw new Error('The email is pending. Please contact to Administrator');
+                case "Activated":
+                    throw new Error('The email is already activated. Please login');
+                case "Deleted":
+                    throw new Error('The email is deleted. If you want to registor again, please contact to Administrator');
+                default:
+            }
+        } else {
+            const passwordHash = await hash(password, roundsOfHashing);
+            const user = await this.prisma.user.create({
+                data: {
+                    roleId,
+                    status: 'Pending',
+                    email: {
+                        create: {
+                            email,
+                            isVerified: false,
+                            emailPassword: {
+                                create: {
+                                    passwordHash,
+                                },
+                            },
+                        },
+                    },
+                },
+                select: { id: true, }
+            });
+
+            if (!user) {
+                throw new Error('Error has occurred during registration');
+            }
+
+            const token = this.jwt.sign({ userId: user.id });
+
+            return { token, message: 'Registration has been succeeded. Your account is Pending now. Please contact to Administrator' };
+        }
+    }
 }

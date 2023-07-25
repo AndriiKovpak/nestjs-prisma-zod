@@ -4,6 +4,7 @@ import { INestApplication } from "@nestjs/common";
 import { patchNestJsSwagger } from 'nestjs-zod';
 
 const tags = [
+    'auth',
     'user',
 ];
 

@@ -16,11 +16,9 @@ export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, 'que
 
     async enableShutdownHooks(app: INestApplication) {
         this.$on('beforeExit', async () => {
-            console.log('[PrismaService] beforeExit()');
             await app.close();
         })
-        this.$on('query', async (p) => {
-            console.log('[PrismaService] query()', p);
-        })
+        // this.$on('query', async (p) => {
+        // })
     }
 }

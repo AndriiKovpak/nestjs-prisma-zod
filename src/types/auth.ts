@@ -24,3 +24,21 @@ export class TokenDTO {
     })
     message?: string;
 }
+
+export class SignUpAuthDTO {
+    @ApiProperty({
+        type: 'string',
+        nullable: true,
+    })
+    roleId: string;
+    @ApiProperty({
+        type: 'string',
+        format: 'email',
+    })
+    email: string;
+    @ApiProperty({
+        type: 'string',
+        format: 'password',
+    })
+    password: string;
+}
