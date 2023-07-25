@@ -105,13 +105,22 @@ model UserPropertyComputed {
 }
 
 model Email {
-  user              User     @relation(fields: [userId], references: [id])
-  userId            String   @unique
-  email             String   @unique
+  user              User           @relation(fields: [userId], references: [id])
+  userId            String         @unique
+  email             String         @unique
   verificationToken String?
-  isVerified        Boolean  @default(false)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @default(now()) @updatedAt
+  isVerified        Boolean        @default(false)
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @default(now()) @updatedAt
+  emailPassword     EmailPassword?
+}
+
+model EmailPassword {
+  email        String   @unique
+  emailModel   Email    @relation(fields: [email], references: [email])
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now()) @updatedAt
 }
 
 enum UserStatus {
