@@ -1,0 +1,87 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id String [pk]
+  status UserStatus [not null, default: 'Pending']
+  role Role [not null]
+  roleId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  deletedAt DateTime
+  properties Property [not null]
+  email Email
+}
+
+Table Role {
+  id String [pk]
+  ord Int [unique, not null]
+  name String [unique, not null]
+  description String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  users User [not null]
+}
+
+Table PropertyCategory {
+  id String [pk]
+  name String [unique, not null]
+  dataType DataType [not null, default: 'String']
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  properties Property [not null]
+  userPropertyComputeds UserPropertyComputed [not null]
+}
+
+Table Property {
+  id String [pk]
+  name String [unique, not null]
+  propertyCategory PropertyCategory [not null]
+  propertyCategoryId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  users User [not null]
+}
+
+Table UserPropertyComputed {
+  id String [pk]
+  ord Int [unique, not null]
+  isUnique Boolean [not null, default: false]
+  propertyCategory PropertyCategory [not null]
+  propertyCategoryId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Table Email {
+  user User [not null]
+  userId String [unique, not null]
+  email String [unique, not null]
+  verificationToken String
+  isVerified Boolean [not null, default: false]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Enum UserStatus {
+  Pending
+  Activated
+  Blacklisted
+  Deleted
+}
+
+Enum DataType {
+  String
+  Number
+  Boolean
+  DateTime
+}
+
+Ref: User.roleId > Role.id
+
+Ref: Property.propertyCategoryId > PropertyCategory.id
+
+Ref: UserPropertyComputed.propertyCategoryId > PropertyCategory.id
+
+Ref: Email.userId - User.id
