@@ -1,105 +1,121 @@
+*Example README.md for a Git Repository*
+
+
+# NestJS Prisma Boilerplate with JWT Authentication
+
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+  <img src="https://nestjs.com/img/logo_text.svg" height="100" alt="NestJS" />
+  <img src="https://avatars.githubusercontent.com/u/17219288?s=200&v=4" height="100" alt="Prisma" />
+  <img src="https://raw.githubusercontent.com/colinhacks/zod/HEAD/logo.svg" height="100" alt="Zod" />
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is a boilerplate project that combines NestJS, Prisma, and Zod to provide a simple and secure authentication setup using JWT (Bearer Token). It also includes a MySQL database configuration to store user information.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Getting Started
 
-## Description
+### Prerequisites
 
-[Nest](https://github.com/AndriiKovpak/nestjs-prisma-zod/) This is a sample repository that you can use with NestJS, Prisma, and Zod.
+- Node.js (v14 or above)
+- npm (v6 or above)
+- MySQL database
 
-## Installation
+### Installation
+
+1. Clone the repository:
 
 ```bash
-# NPM
+$ git clone https://github.com/AndriiKovpak/nestjs-prisma-zod
+$ cd nestjs-prisma-boilerplate
+```
+
+2. Install dependencies:
+
+```bash
 $ npm install
-
-# YARN
-$ yarn install
 ```
 
-## Migrate the database
+3. Set up environment variables:
+
+Create a `.env` file in the root directory of the project and provide the following information:
+
+```dotenv
+NODE_ENV=local
+
+# Information
+APP_TITLE=NestJs-Prisma-Zod
+APP_DESCRIPTION=This is a sample repository that you can use with NestJS, Prisma, and Zod
+VER=0.0.1
+
+# Secret
+SECRET={your-jwt-secret-key}
+ROUNDS_OF_HASHING={your-bcrypt-rounds-of-hashing}
+TOKEN_KEY=access-token
+
+# Environment
+ENV=local
+API_HOST=http://localhost
+API_PORT=3000
+API_URL=http://localhost:3000
+
+# Database
+DATABASE_URL=mysql://{your-mysql-username}:{your-mysql-password}@{your-mysql-host}:3306/{your-database-name}
+DATABASE_HOST={your-mysql-host}
+DATABASE_USER={your-mysql-username}
+DATABASE_PASSWORD={your-mysql-password}
+DATABASE_DB={your-database-name}
+```
+
+
+Replace `your-mysql-username`, `your-mysql-password`, `your-mysql-host`, `your-database-name`, and `your-jwt-secret-key` with your actual values.
+
+4. Generate Prisma client and database migrations:
 
 ```bash
-# NPM
+$ npm run db:generate
 $ npm run db:migrate:dev
-
-# YARN
-$ yarn db:migrate:dev
 ```
 
-## DB seed
+5. DB seed
 
 ```bash
-# NPM
 $ npm run db:seed
-
-# YARN 
-$ yarn db:seed
 ```
 
-## Build the app
+6. Start the application:
 
 ```bash
-# NPM
-$ npm run build
-
-# YARN
-$ yarn build
-```
-
-## Running the app in the development mode
-
-```bash
-# NPM
 $ npm run dev
-
-# yarn
-$ yarn dev
 ```
 
-## Running the app
+The NestJS server will now be running at `http://localhost:3000`.
 
-```bash
-# NPM
-$ npm run start
-# or
-$ npm start
+The Swagger document will now be running at `http://localhost:3000/docs`.
 
-# YARN
-$ yarn start
-```
+![Swagger](./swagger-docs.png)
 
-<!--
-## Support
+## Authentication
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+This boilerplate includes JWT (Bearer Token) authentication. When making requests to protected routes, include the `Authorization` header with the value `Bearer <token>` where `<token>` is the access token obtained after successful login.
 
-## Stay in touch
+## API Endpoints
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- **POST /auth/signup**: Register a new user.
+- **POST /auth/login**: Login and obtain an access token.
+- **GET /auth**: Get the currently logged-in user's profile.
+
+## Built With
+
+- NestJS - A progressive Node.js framework for building efficient and scalable server-side applications.
+- Prisma - A modern database toolkit for TypeScript and Node.js.
+- Zod - A TypeScript-first schema validation library.
+
+## Contributing
+
+Contributions are welcome! If you find any bugs or want to add new features, feel free to open an issue or submit a pull request.
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
--->
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+
+Note: This README.md is a basic example and may require further customization based on the specific needs and features of your NestJS project with Prisma and JWT authentication. Always ensure to provide accurate instructions and information relevant to your repository.
