@@ -3,6 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { RoleEntity } from '../Role/Role.entity';
 import { PropertyEntity } from '../Property/Property.entity';
 import { EmailEntity } from '../Email/Email.entity';
+import { UserOrderEntity } from '../UserOrder/UserOrder.entity';
 
 export class UserEntity {
   id: string;
@@ -29,4 +30,5 @@ export class UserEntity {
   deletedAt: Date | null;
   properties?: PropertyEntity[];
   email?: EmailEntity | null;
+  orders?: UserOrderEntity[];
 }

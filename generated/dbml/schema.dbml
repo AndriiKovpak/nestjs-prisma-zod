@@ -12,6 +12,7 @@ Table User {
   deletedAt DateTime
   properties Property [not null]
   email Email
+  orders UserOrder [not null]
 }
 
 Table Role {
@@ -42,6 +43,8 @@ Table Property {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [default: `now()`, not null]
   users User [not null]
+  products Product [not null]
+  shops Shop [not null]
 }
 
 Table UserPropertyComputed {
@@ -73,6 +76,65 @@ Table EmailPassword {
   updatedAt DateTime [default: `now()`, not null]
 }
 
+Table UserOrder {
+  id String [pk]
+  userId String [not null]
+  user User [not null]
+  amount Float [not null]
+  fee Float [not null]
+  discount Float [not null]
+  total Float [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  items OrderItem [not null]
+}
+
+Table OrderItem {
+  id String [pk]
+  orderId String [not null]
+  order UserOrder [not null]
+  itemsCount Int [not null, default: 1]
+  price Float [not null]
+  itemsAmount Float [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  userOrderId String [not null]
+}
+
+Table ProductCategory {
+  id String [pk]
+  fullIds Json [not null]
+  parentId String
+  ord Int [not null, default: 1]
+  parent ProductCategory
+  children ProductCategory [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  products Product [not null]
+
+  indexes {
+    (parentId, ord) [unique]
+  }
+}
+
+Table Product {
+  id String [pk]
+  categoryId String
+  category ProductCategory
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  properties Property [not null]
+  shops Shop [not null]
+}
+
+Table Shop {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  properties Property [not null]
+  products Product [not null]
+}
+
 Enum UserStatus {
   Pending
   Activated
@@ -96,3 +158,11 @@ Ref: UserPropertyComputed.propertyCategoryId > PropertyCategory.id
 Ref: Email.userId - User.id
 
 Ref: EmailPassword.email - Email.email
+
+Ref: UserOrder.userId > User.id
+
+Ref: OrderItem.userOrderId > UserOrder.id
+
+Ref: ProductCategory.parentId - ProductCategory.id
+
+Ref: Product.categoryId > ProductCategory.id
