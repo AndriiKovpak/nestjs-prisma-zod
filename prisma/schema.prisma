@@ -53,15 +53,16 @@ generator dbml {
 }
 
 model User {
-  id         String     @id @default(cuid())
-  status     UserStatus @default(Pending)
-  role       Role       @relation(fields: [roleId], references: [id])
+  id         String      @id @default(cuid())
+  status     UserStatus  @default(Pending)
+  role       Role        @relation(fields: [roleId], references: [id])
   roleId     String
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @default(now()) @updatedAt
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @default(now()) @updatedAt
   deletedAt  DateTime?
   properties Property[]
   email      Email?
+  orders     UserOrder[]
 }
 
 model Role {
@@ -92,6 +93,8 @@ model Property {
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @default(now()) @updatedAt
   users              User[]
+  products           Product[]
+  shops              Shop[]
 }
 
 model UserPropertyComputed {
@@ -121,6 +124,63 @@ model EmailPassword {
   passwordHash String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now()) @updatedAt
+}
+
+model UserOrder {
+  id        String      @id @default(cuid())
+  userId    String
+  user      User        @relation(fields: [userId], references: [id])
+  amount    Float       @db.Double
+  fee       Float       @db.Double
+  discount  Float       @db.Double
+  total     Float       @db.Double
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @default(now()) @updatedAt
+  items     OrderItem[]
+}
+
+model OrderItem {
+  id          String    @id @default(cuid())
+  orderId     String
+  order       UserOrder @relation(fields: [userOrderId], references: [id])
+  itemsCount  Int       @default(1)
+  price       Float     @db.Double
+  itemsAmount Float     @db.Double
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
+  userOrderId String
+}
+
+model ProductCategory {
+  id        String            @id @default(cuid())
+  fullIds   Json
+  parentId  String?
+  ord       Int               @default(1)
+  parent    ProductCategory?  @relation(name: "tree", fields: [parentId], references: [id])
+  children  ProductCategory[] @relation(name: "tree")
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @default(now()) @updatedAt
+  products  Product[]
+
+  @@unique([parentId, ord])
+}
+
+model Product {
+  id         String           @id @default(cuid())
+  categoryId String?
+  category   ProductCategory? @relation(fields: [categoryId], references: [id])
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @default(now()) @updatedAt
+  properties Property[]
+  shops      Shop[]
+}
+
+model Shop {
+  id         String     @id @default(cuid())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @default(now()) @updatedAt
+  properties Property[]
+  products   Product[]
 }
 
 enum UserStatus {
