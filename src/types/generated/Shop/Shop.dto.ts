@@ -12,4 +12,5 @@ export class ShopDto {
     format: 'date-time',
   })
   updatedAt: Date;
+  videoId: string | null;
 }

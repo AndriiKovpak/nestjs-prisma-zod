@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { PropertyEntity } from '../Property/Property.entity';
 import { ProductEntity } from '../Product/Product.entity';
+import { VideoEntity } from '../Video/Video.entity';
+import { PictureEntity } from '../Picture/Picture.entity';
 
 export class ShopEntity {
   id: string;
@@ -16,4 +18,7 @@ export class ShopEntity {
   updatedAt: Date;
   properties?: PropertyEntity[];
   products?: ProductEntity[];
+  videoId: string | null;
+  video?: VideoEntity | null;
+  pictures?: PictureEntity[];
 }
