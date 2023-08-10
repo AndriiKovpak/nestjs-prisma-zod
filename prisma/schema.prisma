@@ -173,6 +173,9 @@ model Product {
   updatedAt  DateTime         @default(now()) @updatedAt
   properties Property[]
   shops      Shop[]
+  videoId    String?
+  pictures   Picture[]
+  video      Video?           @relation(fields: [videoId], references: [id])
 }
 
 model Shop {
@@ -181,6 +184,35 @@ model Shop {
   updatedAt  DateTime   @default(now()) @updatedAt
   properties Property[]
   products   Product[]
+  videoId    String?
+  video      Video?     @relation(fields: [videoId], references: [id])
+  pictures   Picture[]
+}
+
+model Picture {
+  id        String    @id @default(cuid())
+  location  String
+  ord       Int       @default(1)
+  size      Int?
+  width     Int?
+  height    Int?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+  products  Product[]
+  shops     Shop[]
+}
+
+model Video {
+  id        String    @id @default(cuid())
+  location  String
+  size      Int?
+  duration  Int?
+  width     Int?
+  height    Int?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+  products  Product[]
+  shops     Shop[]
 }
 
 enum UserStatus {

@@ -125,6 +125,9 @@ Table Product {
   updatedAt DateTime [default: `now()`, not null]
   properties Property [not null]
   shops Shop [not null]
+  videoId String
+  pictures Picture [not null]
+  video Video
 }
 
 Table Shop {
@@ -133,6 +136,35 @@ Table Shop {
   updatedAt DateTime [default: `now()`, not null]
   properties Property [not null]
   products Product [not null]
+  videoId String
+  video Video
+  pictures Picture [not null]
+}
+
+Table Picture {
+  id String [pk]
+  location String [not null]
+  ord Int [not null, default: 1]
+  size Int
+  width Int
+  height Int
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  products Product [not null]
+  shops Shop [not null]
+}
+
+Table Video {
+  id String [pk]
+  location String [not null]
+  size Int
+  duration Int
+  width Int
+  height Int
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  products Product [not null]
+  shops Shop [not null]
 }
 
 Enum UserStatus {
@@ -166,3 +198,7 @@ Ref: OrderItem.userOrderId > UserOrder.id
 Ref: ProductCategory.parentId - ProductCategory.id
 
 Ref: Product.categoryId > ProductCategory.id
+
+Ref: Product.videoId > Video.id
+
+Ref: Shop.videoId > Video.id
