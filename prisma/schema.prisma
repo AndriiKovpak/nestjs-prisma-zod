@@ -83,6 +83,7 @@ model PropertyCategory {
   updatedAt             DateTime               @default(now()) @updatedAt
   properties            Property[]
   userPropertyComputeds UserPropertyComputed[]
+  sizesets              Sizeset[]
 }
 
 model Property {
@@ -213,6 +214,13 @@ model Video {
   updatedAt DateTime  @default(now()) @updatedAt
   products  Product[]
   shops     Shop[]
+}
+
+model Sizeset {
+  id         String             @id @default(cuid())
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @default(now()) @updatedAt
+  categories PropertyCategory[]
 }
 
 enum UserStatus {

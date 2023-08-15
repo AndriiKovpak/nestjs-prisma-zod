@@ -33,6 +33,7 @@ Table PropertyCategory {
   updatedAt DateTime [default: `now()`, not null]
   properties Property [not null]
   userPropertyComputeds UserPropertyComputed [not null]
+  sizesets Sizeset [not null]
 }
 
 Table Property {
@@ -165,6 +166,13 @@ Table Video {
   updatedAt DateTime [default: `now()`, not null]
   products Product [not null]
   shops Shop [not null]
+}
+
+Table Sizeset {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  categories PropertyCategory [not null]
 }
 
 Enum UserStatus {
